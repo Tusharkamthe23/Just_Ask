@@ -11,7 +11,7 @@ from langchain.llms import OpenAI
 
 
 # OpenAI API key
-os.environ["OPENAI_API_KEY"] = st.secrets["auth_token"]  
+os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]  
 
 def split_text(raw_text):
     text_splitter = CharacterTextSplitter(
