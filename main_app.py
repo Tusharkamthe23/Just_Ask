@@ -27,7 +27,7 @@ def perform_query(query, document_search, chain):
     docs = document_search.similarity_search(query)
     return chain.run(input_documents=docs, question=query)
 
-st.title("ChatBot")
+st.title("Document Analyzer")
 
 uploaded_file = st.file_uploader("Upload a document (CSV, Excel, TXT, Word, or PDF)", type=["csv", "xlsx", "txt", "docx", "pdf"])
 
