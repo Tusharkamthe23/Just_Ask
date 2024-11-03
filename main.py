@@ -57,15 +57,15 @@ if uploaded_file is not None:
     chain = ConversationalRetrievalChain.from_llm(model, retriever=document_search.as_retriever(), chain_type="stuff")
 
     # Initialize session state for query history and chat history
-    if 'query_history' not in st.session_state:
-        st.session_state.query_history = []
+    if 'chat_history' not in st.session_state:
+        st.session_state.chat_history = []
     
 
     st.title("PDF Query App")
     query = st.text_input("Ask a question:")
 
     if st.button("Search"):
-        result = perform_query(query, document_search, chain,query_history)
+        result = perform_query(query, document_search, chain,chat_history)
         st.write("Answer:", result)
         
         # Append current query and answer to session state
