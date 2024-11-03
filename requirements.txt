@@ -6,5 +6,5 @@ faiss-cpu==1.7.3
 langchain==0.0.350
 openpyxl==3.1.2
 langchain-huggingface==0.0.3
-langchain-groq==0.0.3
+langchain-groq==0.1.10
 
