@@ -25,9 +25,14 @@ def split_text(raw_text):
 
 def perform_query(query, document_search, chain, chat_history):
     # Perform a similarity search
-    docs= document_search.similarity_search(query)
+    docs = document_search.similarity_search(query)
 
-    # Use the run method with named arguments
+    # Debug print to check what is being passed
+    print(f"Docs: {docs}")
+    print(f"Query: {query}")
+    print(f"Chat History: {chat_history}")
+
+    # Call run method with named arguments
     return chain.run(input_documents=docs, question=query, chat_history=chat_history)
 
 uploaded_file = st.file_uploader("Upload a document (CSV, Excel, TXT, Word, or PDF)", type=["csv", "xlsx", "txt", "docx", "pdf"])
@@ -54,16 +59,21 @@ if uploaded_file is not None:
         model_kwargs={'device': 'cpu'},
         encode_kwargs={'normalize_embeddings': False}
     )
-    Document_search = FAISS.from_texts(texts, embeddings)
+    document_search = FAISS.from_texts(texts, embeddings)
 
     # Initialize the ChatGroq model
     model = ChatGroq(groq_api_key=groq_api_key, model_name="Llama3-8b-8192")
     
-    # Initialize the ConversationalRetrievalChain
-    chain = ConversationalRetrievalChain.from_llm(model, retriever=Document_search.as_retriever(), chain_type="stuff")
+    # Initialize the ConversationalRetrievalChain with correct parameters
+    chain = ConversationalRetrievalChain.from_llm(
+        model,
+        retriever=document_search.as_retriever(),  # Ensure this is correctly initialized
+        chain_type="stuff"
+    )
 
     # Initialize session state for query history and chat history
-    
+    if 'query_history' not in st.session_state:
+        st.session_state.query_history = []
     if 'chat_history' not in st.session_state:
         st.session_state.chat_history = []  # Initialize chat history
 
@@ -72,12 +82,17 @@ if uploaded_file is not None:
 
     if st.button("Search"):
         # Call perform_query with keyword arguments only
-        result = perform_query(query=query, document_search=Document_search, chain=chain, chat_history=st.session_state.chat_history)
+        result = perform_query(
+            query=query, 
+            document_search=document_search, 
+            chain=chain, 
+            chat_history=st.session_state.chat_history
+        )
         st.write("Answer:", result)
         
         # Append current query and answer to session state
         st.session_state.chat_history.append((query, result))  # Add current question and answer to chat history
-        
+        st.session_state.query_history.append({"query": query, "answer": result})
 
     st.text("*Query History:*")
     for item in st.session_state.query_history:
