@@ -3,7 +3,7 @@ import pandas as pd
 import openpyxl
 import os
 from langchain.vectorstores import FAISS
-from langchain.chains.question_answering import load_qa_chain
+from langchain.chains.combine_documents import create_stuff_documents_chain
 import streamlit as st
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_groq import ChatGroq
@@ -55,7 +55,7 @@ if uploaded_file is not None:
     document_search = FAISS.from_texts(texts, embeddings)
 
     model =ChatGroq(groq_api_key=groq_api_key,model_name="Llama3-8b-8192")
-    chain = load_qa_chain(model, chain_type="stuff",)
+    chain = create_stuff_documents_chain(model, chain_type="stuff",)
     if 'query_history' not in st.session_state:
         st.session_state.query_history = []
 
