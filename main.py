@@ -72,7 +72,7 @@ if uploaded_file is not None:
 
     if st.button("Search"):
         # Call perform_query with keyword arguments only
-        result = perform_query(query=query, document_search=document_search, chain=chain, chat_history=st.session_state.chat_history)
+        result = perform_query(query=query, document_search, chain=chain, chat_history=st.session_state.chat_history)
         st.write("Answer:", result)
         
         # Append current query and answer to session state
