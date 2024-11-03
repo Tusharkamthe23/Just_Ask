@@ -54,7 +54,7 @@ if uploaded_file is not None:
         model_kwargs={'device': 'cpu'},
         encode_kwargs={'normalize_embeddings': False}
     )
-    document_search = FAISS.from_texts(texts, embeddings)
+    Document_search = FAISS.from_texts(texts, embeddings)
 
     # Initialize the ChatGroq model
     model = ChatGroq(groq_api_key=groq_api_key, model_name="Llama3-8b-8192")
@@ -72,7 +72,7 @@ if uploaded_file is not None:
 
     if st.button("Search"):
         # Call perform_query with keyword arguments only
-        result = perform_query(query=query, document_search, chain=chain, chat_history=st.session_state.chat_history)
+        result = perform_query(query=query, document_search=Document_search, chain=chain, chat_history=st.session_state.chat_history)
         st.write("Answer:", result)
         
         # Append current query and answer to session state
