@@ -9,5 +9,5 @@ tiktoken
 openpyxl
 langchain-huggingface
 langchain-groq
-pip install pydantic==1.10.12
+install pydantic==1.10.12
 
