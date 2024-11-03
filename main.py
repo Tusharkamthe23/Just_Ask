@@ -23,16 +23,19 @@ def split_text(raw_text):
     texts = text_splitter.split_text(raw_text)
     return texts
 
-def perform_query(query, document_search, chain,chat_history):
+def perform_query(query, document_search, chain, chat_history):
+    # Perform a similarity search
     docs = document_search.similarity_search(query)
-    # Pass chat_history as part of the arguments to run
-    return chain.run(input_documents=docs, question=query,chat_history=chat_history)
+
+    # Use the run method with named arguments
+    return chain.run(input_documents=docs, question=query, chat_history=chat_history)
 
 uploaded_file = st.file_uploader("Upload a document (CSV, Excel, TXT, Word, or PDF)", type=["csv", "xlsx", "txt", "docx", "pdf"])
 if uploaded_file is not None:
     file_extension = uploaded_file.name.split(".")[-1].lower()
     raw_text = ""
 
+    # Process uploaded file based on its extension
     if file_extension == "pdf":
         pdf_reader = PdfReader(uploaded_file)
         for page in pdf_reader.pages:
@@ -44,6 +47,8 @@ if uploaded_file is not None:
         raw_text = df.to_string()
 
     texts = split_text(raw_text)
+
+    # Initialize embeddings and FAISS vector store
     embeddings = HuggingFaceEmbeddings(
         model_name="sentence-transformers/all-mpnet-base-v2",
         model_kwargs={'device': 'cpu'},
@@ -51,21 +56,23 @@ if uploaded_file is not None:
     )
     document_search = FAISS.from_texts(texts, embeddings)
 
+    # Initialize the ChatGroq model
     model = ChatGroq(groq_api_key=groq_api_key, model_name="Llama3-8b-8192")
     
-    # Initialize ConversationalRetrievalChain with retriever
+    # Initialize the ConversationalRetrievalChain
     chain = ConversationalRetrievalChain.from_llm(model, retriever=document_search.as_retriever(), chain_type="stuff")
 
     # Initialize session state for query history and chat history
-    if 'chat_history' not in st.session_state:
-        st.session_state.chat_history = []
     
+    if 'chat_history' not in st.session_state:
+        st.session_state.chat_history = []  # Initialize chat history
 
     st.title("PDF Query App")
     query = st.text_input("Ask a question:")
 
     if st.button("Search"):
-        result = perform_query(query, document_search, chain,st.session_state.chat_history)
+        # Call perform_query with keyword arguments only
+        result = perform_query(query=query, document_search=document_search, chain=chain, chat_history=st.session_state.chat_history)
         st.write("Answer:", result)
         
         # Append current query and answer to session state
