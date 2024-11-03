@@ -13,7 +13,7 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 
 
 os.environ["groq_api_key"] = st.secrets["groq_api_key"]  
-
+groq_api_key = os.environ.get("groq_api_key") 
 def split_text(raw_text):
     text_splitter = CharacterTextSplitter(
         separator="\n",
