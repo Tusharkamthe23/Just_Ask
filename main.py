@@ -1,14 +1,14 @@
 from PyPDF2 import PdfReader
 import pandas as pd
 import openpyxl
-
-from langchain.text_splitter import RecursiveCharacterTextSplitter
 import os
 from langchain.vectorstores import FAISS
 from langchain.chains.question_answering import load_qa_chain
 import streamlit as st
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_groq import ChatGroq
+
+from langchain.text_splitter import RecursiveCharacterTextSplitter
 
 
 os.environ["groq_api_key"] = st.secrets["groq_api_key"]  
