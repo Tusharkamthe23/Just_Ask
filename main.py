@@ -60,7 +60,7 @@ if uploaded_file is not None:
     model = ChatGroq(groq_api_key=groq_api_key, model_name="Llama3-8b-8192")
     
     # Initialize the ConversationalRetrievalChain
-    chain = ConversationalRetrievalChain.from_llm(model, retriever=document_search.as_retriever(), chain_type="stuff")
+    chain = ConversationalRetrievalChain.from_llm(model, retriever=Document_search.as_retriever(), chain_type="stuff")
 
     # Initialize session state for query history and chat history
     
