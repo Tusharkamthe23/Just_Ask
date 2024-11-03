@@ -57,7 +57,8 @@ if uploaded_file is not None:
     document_search = FAISS.from_texts(texts, embeddings)
 
     model =ChatGroq(groq_api_key=groq_api_key,model_name="Llama3-8b-8192")
-    chain = load_qa_chain(model, chain_type="stuff",)
+    
+    chain = ConversationalRetrievalChain.from_llm(model, retriever=document_search.as_retriever(), chain_type="stuff")
     if 'query_history' not in st.session_state:
         st.session_state.query_history = []
 
