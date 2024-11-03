@@ -7,3 +7,6 @@ faiss-cpu
 langchain
 tiktoken
 openpyxl
+langchain-huggingface
+langchain-groq
+
