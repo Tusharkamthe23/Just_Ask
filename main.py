@@ -1,7 +1,7 @@
 from PyPDF2 import PdfReader
 import pandas as pd
 import openpyxl
-from langchain.text_splitter import CharacterTextSplitter
+
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 import os
 from langchain.vectorstores import FAISS
@@ -14,7 +14,7 @@ from langchain_groq import ChatGroq
 os.environ["groq_api_key"] = st.secrets["groq_api_key"]  
 
 def split_text(raw_text):
-    text_splitter = CharacterTextSplitter(
+    text_splitter = RecursiveCharacterTextSplitter(
         separator="\n",
         chunk_size=800,
         chunk_overlap=200,
