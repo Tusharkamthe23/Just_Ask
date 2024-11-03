@@ -1,11 +1,11 @@
-streamlit==1.24.1
-pandas==2.0.3
-numpy==1.26.3
-PyPDF2==3.0.1
-faiss-cpu==1.8.0
-langchain==0.2.14  
+streamlit
+pandas
+numpy
+PyPDF2
+faiss-cpu
+langchain  
 
-openpyxl==3.1.3
-langchain-huggingface==0.0.3
-langchain-groq==0.1.10
+openpyxl
+langchain-huggingface
+langchain-groq
 
