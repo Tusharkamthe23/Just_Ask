@@ -25,7 +25,7 @@ def split_text(raw_text):
 
 def perform_query(query, document_search, chain, chat_history):
     # Perform a similarity search
-    docs = document_search.similarity_search(query)
+    docs= document_search.similarity_search(query)
 
     # Use the run method with named arguments
     return chain.run(input_documents=docs, question=query, chat_history=chat_history)
@@ -77,7 +77,7 @@ if uploaded_file is not None:
         
         # Append current query and answer to session state
         st.session_state.chat_history.append((query, result))  # Add current question and answer to chat history
-        st.session_state.query_history.append({"query": query, "answer": result})
+        
 
     st.text("*Query History:*")
     for item in st.session_state.query_history:
