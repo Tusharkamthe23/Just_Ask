@@ -24,6 +24,7 @@ def split_text(raw_text):
 
 def perform_query(query, document_search, chain, chat_history):
     docs = document_search.similarity_search(query)
+    # Ensure all arguments are passed as keyword arguments
     return chain.run(input_documents=docs, question=query, chat_history=chat_history)
 
 uploaded_file = st.file_uploader("Upload a document (CSV, Excel, TXT, Word, or PDF)", type=["csv", "xlsx", "txt", "docx", "pdf"])
@@ -66,8 +67,4 @@ if uploaded_file is not None:
 
         # Append the current query and answer to chat history
         st.session_state.chat_history.append((query, result))  # Append current query and result to chat history
-        st.session_state.query_history.append({"query": query, "answer": result})
-
-    st.text("*Query History:*")
-    for item in st.session_state.query_history:
-        st.text(f"Query: {item['query']}\nAnswer: {item['answer']}")
+      
