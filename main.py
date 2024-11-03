@@ -66,7 +66,8 @@ if uploaded_file is not None:
     query = st.text_input("Ask a question:")
 
     if st.button("Search"):
-        result = perform_query(query, document_search, chain, st.session_state.chat_history)
+        # Make sure to call perform_query with the correct arguments
+        result = perform_query(query=query, document_search=document_search, chain=chain, chat_history=st.session_state.chat_history)
         st.write("Answer:", result)
         
         # Append current query and answer to session state
