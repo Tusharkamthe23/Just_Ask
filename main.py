@@ -67,7 +67,7 @@ if uploaded_file is not None:
 
     if st.button("Search"):
 
-        result = perform_query(query, document_search, chain)
+        result = perform_query(query, document_search, chain,chat_history)
         st.write("Answer:", result)
 
 
