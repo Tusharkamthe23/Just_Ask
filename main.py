@@ -59,8 +59,7 @@ if uploaded_file is not None:
     # Initialize session state for query history and chat history
     if 'query_history' not in st.session_state:
         st.session_state.query_history = []
-    if 'chat_history' not in st.session_state:
-        st.session_state.chat_history = []  # Initialize chat history
+    
 
     st.title("PDF Query App")
     query = st.text_input("Ask a question:")
