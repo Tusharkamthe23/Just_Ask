@@ -4,7 +4,7 @@ import openpyxl
 import os
 from langchain.vectorstores import FAISS
 
-
+from langchain.text_splitter import CharacterTextSplitter
 import streamlit as st
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_groq import ChatGroq
@@ -15,7 +15,7 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 os.environ["groq_api_key"] = st.secrets["groq_api_key"]  
 
 def split_text(raw_text):
-    text_splitter = RecursiveCharacterTextSplitter(
+    text_splitter = CharacterTextSplitter(
         separator="\n",
         chunk_size=800,
         chunk_overlap=200,
