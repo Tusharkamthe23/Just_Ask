@@ -23,10 +23,10 @@ def split_text(raw_text):
     texts = text_splitter.split_text(raw_text)
     return texts
 
-def perform_query(query, document_search, chain):
+def perform_query(query, document_search, chain,chat_history):
     docs = document_search.similarity_search(query)
     # Pass chat_history as part of the arguments to run
-    return chain.run(input_documents=docs, question=query)
+    return chain.run(input_documents=docs, question=query,chat_history=chat_history))
 
 uploaded_file = st.file_uploader("Upload a document (CSV, Excel, TXT, Word, or PDF)", type=["csv", "xlsx", "txt", "docx", "pdf"])
 if uploaded_file is not None:
@@ -65,7 +65,7 @@ if uploaded_file is not None:
     query = st.text_input("Ask a question:")
 
     if st.button("Search"):
-        result = perform_query(query, document_search, chain)
+        result = perform_query(query, document_search, chain,query_history)
         st.write("Answer:", result)
         
         # Append current query and answer to session state
