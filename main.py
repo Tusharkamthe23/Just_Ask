@@ -8,12 +8,10 @@ import streamlit as st
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_groq import ChatGroq
 from langchain.chains import ConversationalRetrievalChain
-os.environ["groq_api_key"] = st.secrets["groq_api_key"] 
-groq_api_key = os.environ.get("groq_api_key")  
 
-
-
-
+# Set up the Groq API key
+os.environ["groq_api_key"] = st.secrets["groq_api_key"]
+groq_api_key = os.environ.get("groq_api_key")
 
 def split_text(raw_text):
     text_splitter = CharacterTextSplitter(
@@ -25,13 +23,10 @@ def split_text(raw_text):
     texts = text_splitter.split_text(raw_text)
     return texts
 
-def perform_query(query, document_search, chain):
+def perform_query(query, document_search, chain, chat_history):
     docs = document_search.similarity_search(query)
-    return chain.run(input_documents=docs, question=query)
-
-
-
-
+    # Pass chat_history as part of the arguments to run
+    return chain.run(input_documents=docs, question=query, chat_history=chat_history)
 
 uploaded_file = st.file_uploader("Upload a document (CSV, Excel, TXT, Word, or PDF)", type=["csv", "xlsx", "txt", "docx", "pdf"])
 if uploaded_file is not None:
@@ -49,28 +44,33 @@ if uploaded_file is not None:
         raw_text = df.to_string()
 
     texts = split_text(raw_text)
-    embeddings =HuggingFaceEmbeddings(
-    model_name="sentence-transformers/all-mpnet-base-v2",
-    model_kwargs={'device': 'cpu'},
-    encode_kwargs={'normalize_embeddings': False}
+    embeddings = HuggingFaceEmbeddings(
+        model_name="sentence-transformers/all-mpnet-base-v2",
+        model_kwargs={'device': 'cpu'},
+        encode_kwargs={'normalize_embeddings': False}
     )
     document_search = FAISS.from_texts(texts, embeddings)
 
-    model =ChatGroq(groq_api_key=groq_api_key,model_name="Llama3-8b-8192")
+    model = ChatGroq(groq_api_key=groq_api_key, model_name="Llama3-8b-8192")
     
+    # Initialize ConversationalRetrievalChain with retriever
     chain = ConversationalRetrievalChain.from_llm(model, retriever=document_search.as_retriever(), chain_type="stuff")
+
+    # Initialize session state for query history and chat history
     if 'query_history' not in st.session_state:
         st.session_state.query_history = []
+    if 'chat_history' not in st.session_state:
+        st.session_state.chat_history = []  # Initialize chat history
 
     st.title("PDF Query App")
     query = st.text_input("Ask a question:")
 
     if st.button("Search"):
-
-        result = perform_query(query, document_search, chain)
+        result = perform_query(query, document_search, chain, st.session_state.chat_history)
         st.write("Answer:", result)
-
-
+        
+        # Append current query and answer to session state
+        st.session_state.chat_history.append((query, result))  # Add current question and answer to chat history
         st.session_state.query_history.append({"query": query, "answer": result})
 
     st.text("*Query History:*")
