@@ -7,8 +7,8 @@ from langchain.text_splitter import CharacterTextSplitter
 import streamlit as st
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_groq import ChatGroq
-from langchain.chains import ConversationalRetrievalChain
 
+from langchain.chains import create_retrieval_chain
 # Set up the Groq API key
 os.environ["groq_api_key"] = st.secrets["groq_api_key"]
 groq_api_key = os.environ.get("groq_api_key")
