@@ -66,7 +66,7 @@ if uploaded_file is not None:
     
     # Initialize the ConversationalRetrievalChain with correct parameters
     #chain = ConversationalRetrievalChain.from_llm(model,retriever=document_search.as_retriever(),  # Ensure this is correctly initializedchain_type="stuff")
-    chain = create_retrieval_chain(model,chain_type="stuff" )
+    chain = create_retrieval_chain(model )
 
     # Initialize session state for query history and chat history
     if 'query_history' not in st.session_state:
